@@ -192,6 +192,51 @@ predictions_with_loaded_model <-
   predict(loaded_diabetes_model_lda, newdata = diabetes_testing)
 confusionMatrix(predictions_with_loaded_model, diabetes_testing$diabetes)
 
+
+# STEP 6. Creating Functions in R ----
+
+# Plumber requires functions, an example of the syntax for creating a function
+# in R is:
+
+name_of_function <- function(arg) {
+  # Do something with the argument called `arg`
+}
+
+# STEP 7. Make Predictions on New Data using the Saved Model ----
+# We can also create and use our own data frame as follows:
+to_be_predicted <-
+  data.frame(pregnant = 6, glucose = 148, pressure = 72, triceps = 35,
+             insulin = 0, mass = 33.6, pedigree = 0.627, age = 50)
+
+# We then use the data frame to make predictions
+predict(loaded_diabetes_model_lda, newdata = to_be_predicted)
+
+# STEP 8. Make predictions using the model through a function ----
+# An alternative is to create a function and then use the function to make
+# predictions
+
+predict_diabetes <-
+  function(arg_pregnant, arg_glucose, arg_pressure, arg_triceps, arg_insulin,
+           arg_mass, arg_pedigree, arg_age) {
+    # Create a data frame using the arguments
+    to_be_predicted <-
+      data.frame(pregnant = arg_pregnant, glucose = arg_glucose,
+                 pressure = arg_pressure, triceps = arg_triceps,
+                 insulin = arg_insulin, mass = arg_mass,
+                 pedigree = arg_pedigree, age = arg_age)
+
+    # Make a prediction based on the data frame
+    predict(loaded_diabetes_model_lda, to_be_predicted)
+  }
+
+
+# We can now call the function predict_diabetes() instead of calling the
+# predict() function directly
+
+predict_diabetes(6, 148, 72, 35, 0, 33.6, 0.627, 50)
+
+predict_diabetes(1, 85, 66, 29, 0, 26.6, 0.351, 31)
+
 # [OPTIONAL] **Deinitialization: Create a snapshot of the R environment ----
 # Lastly, as a follow-up to the initialization step, record the packages
 # installed and their sources in the lockfile so that other team-members can
